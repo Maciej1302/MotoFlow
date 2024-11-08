@@ -1,0 +1,48 @@
+version: '3'
+services:
+  web:
+    image: motoflow
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: MotoFlow_backend
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    env_file:
+      - .env
+    command: python3 backend/manage.py runserver 0.0.0.0:8000
+
+
+  db:
+    image: postgres:latest
+    container_name: my_postgres
+    env_file:
+      - .env
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  frontend:
+    image: motoflow_f
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: MotoFlow_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    command: npm start
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
