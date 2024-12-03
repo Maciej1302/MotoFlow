@@ -12,9 +12,14 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app/backend
+    environment:
+      - DJANGO_SETTINGS_MODULE=MotoFlow.settings.dev
     env_file:
       - .env
     command: python3 backend/manage.py runserver 0.0.0.0:8000
+    networks:
+      - backend-network
+      - frontend-network
 
 
   db:
@@ -27,6 +32,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
+    networks:
+      - backend-network
 
   frontend:
     image: motoflow_f
@@ -39,6 +46,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    networks:
+      - frontend-network
 
     command: npm start
     depends_on:
@@ -46,3 +55,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  backend-network:
+  frontend-network:

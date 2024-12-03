@@ -13,15 +13,11 @@ import os
 from pathlib import Path
 from environs import Env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = Env()
 env.read_env(path=".env")
 SECRET_KEY = env.str("SECRET_KEY")
-
-DEBUG = True
-
-ALLOWED_HOSTS = ['0.0.0.0', "localhost"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -113,6 +109,9 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

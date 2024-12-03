@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+
+      dockerfile: Dockerfile.prod
+    container_name: MotoFlow_backend_prod
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - .env.prod
+    environment:
+      - DJANGO_SETTINGS_MODULE=MotoFlow.settings.prod
+    expose:
+      - "8000"
+    networks:
+      - production-network
+
+#  db:
+#    image: postgres:latest
+#    env_file:
+#      - .env.prod
+#    volumes:
+#      - postgres_data_prod:/var/lib/postgresql/data
+#    restart: always
+#    networks:
+#      - production-network
+#
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    networks:
+      - production-network
+
+  nginx:
+    image: nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - production-network
+
+volumes:
+  postgres_data_prod:
+  static_volume:
+  media_volume:
+  build_volume:
+
+networks:
+  production-network:
