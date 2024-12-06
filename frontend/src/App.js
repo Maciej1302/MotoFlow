@@ -5,7 +5,7 @@ function App() {
     const [error, setError] = useState(null); // Stan do przechowywania błędów
 
     useEffect(() => {
-        fetch('http://0.0.0.0:8000/myapp/')  // Użyj poprawnego endpointu
+        fetch('http://localhost:8000/myapp/')  // Użyj poprawnego endpointu
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response wsas not ok');
