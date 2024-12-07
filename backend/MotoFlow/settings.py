@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+
+from django.conf.global_settings import AUTH_USER_MODEL
 from environs import Env
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +24,9 @@ SECRET_KEY = env.str("SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', "localhost"]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
+
+AUTH_USER_MODEL = "users.ExtendedUser"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -31,7 +36,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
-    "testapp",
+    "cars",
+    "users",
+    "blogs",
+    "media",
+    "auctions"
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -41,7 +50,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "MotoFlow.urls"
@@ -49,8 +58,7 @@ ROOT_URLCONF = "MotoFlow.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -66,15 +74,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "MotoFlow.wsgi.application"
 
 
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env.str('POSTGRES_DB'),
-        'USER': env.str('POSTGRES_USER'),
-        'PASSWORD': env.str('POSTGRES_PASSWORD'),
-        'HOST': env.str('DB_HOST', default='db'),
-        'PORT': env.int('DB_PORT', default=5432),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env.str("POSTGRES_DB"),
+        "USER": env.str("POSTGRES_USER"),
+        "PASSWORD": env.str("POSTGRES_PASSWORD"),
+        "HOST": env.str("DB_HOST", default="db"),
+        "PORT": env.int("DB_PORT", default=5432),
     }
 }
 
@@ -98,7 +105,7 @@ CORS_ALLOW_ALL_ORIGINS = True  # Umożliwia połączenia z dowolnego źródła
 
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    "http://localhost:3000",
 ]
 
 
@@ -109,7 +116,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 
 STATIC_URL = "static/"
